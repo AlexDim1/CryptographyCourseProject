@@ -1,23 +1,24 @@
 ﻿using CryptographyCourseProject;
 
-//Console.WriteLine("Enter key1:");
-//var key1 = Console.ReadLine();
+Console.WriteLine("Enter key1:");
+var key1 = Console.ReadLine();
 
-Console.WriteLine("Enter key2:");
-var key2 = Console.ReadLine();
+//Console.WriteLine("Enter key2:");
+//var key2 = Console.ReadLine();
 
-//Console.WriteLine("Enter key3:");
-//var key3 = Console.ReadLine();
+Console.WriteLine("Enter key3:");
+var key3 = Console.ReadLine();
 
 Console.WriteLine("Enter text:");
 var input = Console.ReadLine();
 var plainText = input.ToCharArray().ToList();
 
-var table = TSTAlgorithm.GenerateSubstitutionTable();
+var tst = new TSTAlgorithm(key1, key3);
 
-PrintDict(table);
+
+PrintDict(tst.Key2);
 //Console.WriteLine(TSTAlgorithm.VerticalTransposition(key1, input));
-PrintList(TSTAlgorithm.DirectSubstitution(table, plainText));
+PrintList(tst.Encrypt(input));
 
 
 void PrintList<T>(List<T> list)
