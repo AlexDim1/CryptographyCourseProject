@@ -6,9 +6,10 @@ namespace CryptographyCourseProject
     {
 
         // Step 1 and 3 in the Transposition-Substitution-Transposition Algorithm
-        public static string VerticalTransposition(string key, string plainText)
+        public static List<char> VerticalTransposition(string key, string plainText)
         {
             StringBuilder sb = new StringBuilder();
+            var result = new List<char>();
 
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
@@ -37,15 +38,54 @@ namespace CryptographyCourseProject
             // Create the cryptogram by taking the chars by column
             for (int col = 0; col < transposedTable[0].Count; col++)
                 for (int row = 0; row < transposedTable.Count; row++)
-                    sb.Append(transposedTable[row][col]);
+                    result.Add(transposedTable[row][col]);
 
-            return sb.ToString();
+            return result;
         }
 
-        //public static List<int> DirectSubstitution(Dictionary<char, int> key, string plainText)
-        //{
+        public static List<int> DirectSubstitution(Dictionary<char, int> key, List<char> plainText)
+        {
+            var result = new List<int>();
 
-        //}
+            for (int i = 0; i < plainText.Count; i++)
+                result.Add(key[plainText[i]]);
+
+
+            return result;
+        }
+
+        public static Dictionary<char, int> GenerateSubstitutionTable()
+        {
+            var result = new Dictionary<char, int>();
+            var r = new Random();
+            var usedValues = new List<int>();
+
+            for (char c = 'a'; c <= 'z'; c++)
+            {
+                var value = r.Next(20, 100);
+
+                while (usedValues.Contains(value))
+                    value = r.Next(20, 100);
+
+                result.Add(c, value);
+                usedValues.Add(value);
+            }
+
+            char[] chars = new char[] { ' ', ',', ';', ':', '!', '?', '-', '.' };
+
+            foreach (char c in chars)
+            {
+                var value = r.Next(10, 20);
+
+                while (usedValues.Contains(value))
+                    value = r.Next(10, 20);
+
+                result.Add(c, value);
+                usedValues.Add(value);
+            }
+
+            return result;
+        }
 
         public static List<List<char>> CreateTable(List<string> textBlocks)
         {
