@@ -27,7 +27,8 @@ namespace CryptographyCourseProject
         {
             var c2 = VerticalTransposition2Dec(Key3, cryptogram);
             var c1 = DirectSubstitutionDec(Key2, c2);
-            return c1;
+            var pt = VerticalTransposition1Dec(Key1, c1);
+            return pt;
         }
 
         // Step 1 and 3 in the Transposition-Substitution-Transposition Algorithm
@@ -63,6 +64,41 @@ namespace CryptographyCourseProject
             for (int col = 0; col < transposedTable[0].Count; col++)
                 for (int row = 0; row < transposedTable.Count; row++)
                     result.Add(transposedTable[row][col]);
+
+            return result;
+        }
+
+        public List<char> VerticalTransposition1Dec(string key, List<char> cryptogram)
+        {
+            var result = new List<char>();
+
+            // Get the indices we use for swapping the columns
+            var numKey = GetKeyNumbers(key);
+
+            var blockCount = cryptogram.Count / key.Length;
+
+            List<List<char>> transformedTable = new List<List<char>>();
+
+            // Create our starting table with the blocks of the PT
+            var tablePlainText = CreateCryptogramTableChar(blockCount, cryptogram);
+
+            // Apply transposition to columns
+            for (int row = 0; row < tablePlainText.Count; row++)
+            {
+                var newRow = new List<char>();
+                for (int i = 0; i < tablePlainText[0].Count; i++)
+                {
+                    var valForNewIdx = numKey[i];
+                    newRow.Add(tablePlainText[row][valForNewIdx - 1]);
+                }
+
+                transformedTable.Add(newRow);
+            }
+
+            // Form result
+            for (int row = 0; row < transformedTable.Count; row++)
+                for (int col = 0; col < transformedTable[0].Count; col++)
+                    result.Add(transformedTable[row][col]);
 
             return result;
         }
@@ -124,19 +160,19 @@ namespace CryptographyCourseProject
             return result;
         }
 
-        public List<int> VerticalTransposition2Dec(string key, List<int> plainText)
+        public List<int> VerticalTransposition2Dec(string key, List<int> cryptogram)
         {
             var result = new List<int>();
 
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
 
-            var blockCount = plainText.Count / key.Length;
+            var blockCount = cryptogram.Count / key.Length;
 
             List<List<int>> transformedTable = new List<List<int>>();
 
             // Create our starting table with the blocks of the PT
-            var tablePlainText = CreateCryptogramTable(blockCount, plainText);
+            var tablePlainText = CreateCryptogramTableInt(blockCount, cryptogram);
 
             // Apply transposition to columns
             for (int row = 0; row < tablePlainText.Count; row++)
@@ -151,15 +187,15 @@ namespace CryptographyCourseProject
                 transformedTable.Add(newRow);
             }
 
-            // Create the cryptogram by taking the chars by column
-            for (int row = 0; row < transformedTable[0].Count; row++)
-                for (int col = 0; col < transformedTable.Count; col++)
+            // Form result
+            for (int row = 0; row < transformedTable.Count; row++)
+                for (int col = 0; col < transformedTable[0].Count; col++)
                     result.Add(transformedTable[row][col]);
 
             return result;
         }
 
-        public List<List<int>> CreateCryptogramTable(int blockCount, List<int> text)
+        public List<List<int>> CreateCryptogramTableInt(int blockCount, List<int> text)
         {
             List<List<int>> table = new List<List<int>>();
             var charsRemaining = text;
@@ -177,12 +213,50 @@ namespace CryptographyCourseProject
                     continue;
                 }
 
-                //var shortBlock = charsRemaining.Take(text.Count - i).ToList();
-                //while (shortBlock.Count < blockCount)
-                //    shortBlock.Add(Key2[' ']);
+                var shortBlock = charsRemaining.Take(text.Count - i).ToList();
+                while (shortBlock.Count < blockCount)
+                    shortBlock.Add(Key2[' ']);
 
-                //col.AddRange(shortBlock);
-                //table.Add(col);
+                col.AddRange(shortBlock);
+                table.Add(col);
+
+                charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+            }
+
+            // Transpose table so we get the right table
+            var result = table
+                .SelectMany(inner => inner.Select((item, index) => new { item, index }))
+                .GroupBy(i => i.index, i => i.item)
+                .Select(g => g.ToList())
+                .ToList();
+
+            return result;
+        }
+
+        public List<List<char>> CreateCryptogramTableChar(int blockCount, List<char> text)
+        {
+            List<List<char>> table = new List<List<char>>();
+            var charsRemaining = text;
+
+            int ctr = 1;
+            for (int i = 0; i < text.Count; i += blockCount)
+            {
+                var col = new List<char>();
+
+                if (i + blockCount <= text.Count)
+                {
+                    col.AddRange(charsRemaining.Take(blockCount));
+                    charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+                    table.Add(col);
+                    continue;
+                }
+
+                var shortBlock = charsRemaining.Take(text.Count - i).ToList();
+                while (shortBlock.Count < blockCount)
+                    shortBlock.Add(' ');
+
+                col.AddRange(shortBlock);
+                table.Add(col);
 
                 charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
             }
