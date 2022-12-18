@@ -18,7 +18,16 @@ var tst = new TSTAlgorithm(key1, key3);
 
 PrintDict(tst.Key2);
 //Console.WriteLine(TSTAlgorithm.VerticalTransposition(key1, input));
-PrintList(tst.Encrypt(input));
+var encrypted = tst.Encrypt(input);
+PrintList(tst.VerticalTransposition1Enc(tst.Key1, input));
+PrintList(encrypted);
+
+//PrintNestedList(tst.CreateCryptogramTable(encrypted.Count / tst.Key3.Length, encrypted));
+//Console.WriteLine();
+//PrintList(tst.VerticalTransposition2Dec(tst.Key3, encrypted));
+
+//var decrypted =
+PrintList(tst.Decrypt(encrypted));
 
 
 void PrintList<T>(List<T> list)
