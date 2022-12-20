@@ -28,7 +28,7 @@
                 throw new Exception("Enter a message!");
 
             foreach(var c in input)
-                if (c < 'a' || c > 'z')
+                if (char.IsLetter(c) && (c < 'a' || c > 'z'))
                     throw new Exception("Invalid characters in message! (Latin alphabet only)");
         }
     }

@@ -82,7 +82,7 @@ namespace CryptographyCourseProject
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
 
-            var blockCount = (trimmedList.Count / key.Length) + 1;
+            var blockCount = (int)Math.Ceiling((double)(trimmedList.Count / key.Length));
 
             List<List<char>> transformedTable = new List<List<char>>();
 
@@ -174,7 +174,7 @@ namespace CryptographyCourseProject
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
 
-            var blockCount = cryptogram.Count / key.Length;
+            var blockCount = (int)Math.Ceiling((double)(cryptogram.Count / key.Length));
 
             List<List<int>> transformedTable = new List<List<int>>();
 

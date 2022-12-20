@@ -1,17 +1,24 @@
 ﻿using CryptographyCourseProject;
 
 
-string key1;
-string key3;
+
 try
 {
     Console.WriteLine("Enter key for VerticalSubstitution1 (Key1):");
-    key1 = Console.ReadLine();
+    string key1 = Console.ReadLine();
     Utils.validateKey(key1.ToLower());
+    Console.Write(" -> ");
+    PrintList(TSTAlgorithm.GetKeyNumbers(key1));
+
+    Console.WriteLine();
 
     Console.WriteLine("Enter key for VerticalSubstitution2 (Key3):");
-    key3 = Console.ReadLine();
+    string key3 = Console.ReadLine();
     Utils.validateKey(key3.ToLower());
+    Console.Write(" -> ");
+    PrintList(TSTAlgorithm.GetKeyNumbers(key3));
+
+    Console.WriteLine();
 
     Console.WriteLine("Enter text:");
     Console.Write("P = ");
@@ -28,6 +35,8 @@ try
     Console.WriteLine();
 
     var encrypted = tst.Encrypt(input);
+
+    Console.WriteLine($"P = {input}");
 
     Console.WriteLine("Result after VerticalTransposition1Enc:");
     Console.Write("c1 = ");
