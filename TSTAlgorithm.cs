@@ -1,4 +1,4 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Text;
 
 namespace CryptographyCourseProject
 {
@@ -7,28 +7,33 @@ namespace CryptographyCourseProject
         public string Key1 { get; set; }
         public Dictionary<char, int> Key2 { get; set; }
         public string Key3 { get; set; }
+        public string PlainText { get; set; }
+        public List<char>? c1 { get; set; }
+        public List<int>? c2 { get; set; }
+        public List<int>? Cryptogram { get; set; }
 
-        public TSTAlgorithm(string key1, string key3)
+        public TSTAlgorithm(string key1, string key3, string plainText)
         {
             Key1 = key1;
-            Key2 = GenerateSubstitutionTable();
+            Key2 = GenerateSubstitutionKey();
             Key3 = key3;
+            PlainText = plainText;
         }
 
         public List<int> Encrypt(string plainText)
         {
-            var c1 = VerticalTransposition1Enc(Key1, plainText);
-            var c2 = DirectSubstitutionEnc(Key2, c1);
-            var c3 = VerticalTransposition2Enc(Key3, c2);
-            return c3;
+            c1 = VerticalTransposition1Enc(Key1, plainText.ToLower());
+            c2 = DirectSubstitutionEnc(Key2, c1);
+            Cryptogram = VerticalTransposition2Enc(Key3, c2);
+            return Cryptogram;
         }
 
-        public List<char> Decrypt(List<int> cryptogram)
+        public string Decrypt(List<int> cryptogram)
         {
-            var c2 = VerticalTransposition2Dec(Key3, cryptogram);
-            var c1 = DirectSubstitutionDec(Key2, c2);
-            var pt = VerticalTransposition1Dec(Key1, c1);
-            return pt;
+            c2 = VerticalTransposition2Dec(Key3, cryptogram);
+            c1 = DirectSubstitutionDec(Key2, c2);
+            PlainText = VerticalTransposition1Dec(Key1, c1);
+            return PlainText;
         }
 
         // Step 1 and 3 in the Transposition-Substitution-Transposition Algorithm
@@ -68,19 +73,21 @@ namespace CryptographyCourseProject
             return result;
         }
 
-        public List<char> VerticalTransposition1Dec(string key, List<char> cryptogram)
+        public string VerticalTransposition1Dec(string key, List<char> cryptogram)
         {
+            StringBuilder sb = new StringBuilder();
+            var trimmedList = new string(cryptogram.ToArray()).Trim().ToCharArray().ToList();
             var result = new List<char>();
 
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
 
-            var blockCount = cryptogram.Count / key.Length;
+            var blockCount = (trimmedList.Count / key.Length) + 1;
 
             List<List<char>> transformedTable = new List<List<char>>();
 
             // Create our starting table with the blocks of the PT
-            var tablePlainText = CreateCryptogramTableChar(blockCount, cryptogram);
+            var tablePlainText = CreateCryptogramTableChar(blockCount, trimmedList);
 
             // Apply transposition to columns
             for (int row = 0; row < tablePlainText.Count; row++)
@@ -98,9 +105,9 @@ namespace CryptographyCourseProject
             // Form result
             for (int row = 0; row < transformedTable.Count; row++)
                 for (int col = 0; col < transformedTable[0].Count; col++)
-                    result.Add(transformedTable[row][col]);
+                    sb.Append(transformedTable[row][col]);
 
-            return result;
+            return sb.ToString();
         }
 
         public List<int> DirectSubstitutionEnc(Dictionary<char, int> key, List<char> plainText)
@@ -302,7 +309,7 @@ namespace CryptographyCourseProject
             return table;
         }
 
-        public static Dictionary<char, int> GenerateSubstitutionTable()
+        public static Dictionary<char, int> GenerateSubstitutionKey()
         {
             var result = new Dictionary<char, int>();
             var r = new Random();
@@ -380,19 +387,13 @@ namespace CryptographyCourseProject
             Dictionary<char, int> charIndex = new Dictionary<char, int>();
 
             List<char> orderedKey = key.OrderBy(x => x).ToList();
-            //Console.WriteLine(orderedKey);
 
             int ctr = 1;
             foreach (char c in orderedKey)
                 charIndex.Add(c, ctr++);
 
-            //foreach(var pair in charIndex)
-            //    Console.WriteLine($"{pair.Key}: {pair.Value}");
-
             foreach (char c in key)
                 keyNumbers.Add(charIndex[c]);
-
-            //Console.WriteLine(keyNumbers);
 
             return keyNumbers;
         }
