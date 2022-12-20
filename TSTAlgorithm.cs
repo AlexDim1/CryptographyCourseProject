@@ -14,9 +14,9 @@ namespace CryptographyCourseProject
 
         public TSTAlgorithm(string key1, string key3, string plainText)
         {
-            Key1 = key1;
+            Key1 = key1.ToLower();
             Key2 = GenerateSubstitutionKey();
-            Key3 = key3;
+            Key3 = key3.ToLower();
             PlainText = plainText;
         }
 

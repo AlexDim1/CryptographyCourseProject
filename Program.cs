@@ -7,15 +7,16 @@ try
 {
     Console.WriteLine("Enter key for VerticalSubstitution1 (Key1):");
     key1 = Console.ReadLine();
-    Utils.validateKey(key1);
+    Utils.validateKey(key1.ToLower());
 
     Console.WriteLine("Enter key for VerticalSubstitution2 (Key3):");
     key3 = Console.ReadLine();
-    Utils.validateKey(key3);
+    Utils.validateKey(key3.ToLower());
 
     Console.WriteLine("Enter text:");
     Console.Write("P = ");
     var input = Console.ReadLine();
+    Utils.validateInput(input);
 
     var tst = new TSTAlgorithm(key1, key3, input);
 
@@ -68,17 +69,6 @@ catch (Exception e)
 {
     Console.WriteLine(e.Message);
 }
-
-
-
-//PrintNestedList(tst.CreateCryptogramTable(encrypted.Count / tst.Key3.Length, encrypted));
-//Console.WriteLine();
-//PrintList(tst.VerticalTransposition2Dec(tst.Key3, encrypted));
-
-//var decrypted =
-//Console.WriteLine();
-//PrintList(tst.Decrypt(encrypted));
-
 
 void PrintList<T>(List<T> list)
 {
