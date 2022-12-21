@@ -317,10 +317,10 @@ namespace CryptographyCourseProject
 
             for (char c = 'a'; c <= 'z'; c++)
             {
-                var value = r.Next(20, 100);
+                var value = r.Next(10, 100);
 
                 while (usedValues.Contains(value))
-                    value = r.Next(20, 100);
+                    value = r.Next(10, 100);
 
                 result.Add(c, value);
                 usedValues.Add(value);
@@ -330,10 +330,10 @@ namespace CryptographyCourseProject
 
             foreach (char c in chars)
             {
-                var value = r.Next(20, 100);
+                var value = r.Next(10, 100);
 
                 while (usedValues.Contains(value))
-                    value = r.Next(20, 100);
+                    value = r.Next(10, 100);
 
                 result.Add(c, value);
                 usedValues.Add(value);
