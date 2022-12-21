@@ -36,7 +36,6 @@ namespace CryptographyCourseProject
             return PlainText;
         }
 
-        // Step 1 and 3 in the Transposition-Substitution-Transposition Algorithm
         public List<char> VerticalTransposition1Enc(string key, string plainText)
         {
             var result = new List<char>();
@@ -86,7 +85,7 @@ namespace CryptographyCourseProject
 
             List<List<char>> transformedTable = new List<List<char>>();
 
-            // Create our starting table with the blocks of the PT
+            // Create our starting table with the blocks of the Cryptogram
             var tablePlainText = CreateCryptogramTableChar(blockCount, trimmedList);
 
             // Apply transposition to columns
@@ -137,9 +136,6 @@ namespace CryptographyCourseProject
 
             // Get the indices we use for swapping the columns
             var numKey = GetKeyNumbers(key);
-
-            // Divide our plain text into blocks of size key.Length
-            //var textBlocks = GetStringBlocks(key.Length, plainText);
 
             List<List<int>> transformedTable = new List<List<int>>();
 
@@ -207,7 +203,6 @@ namespace CryptographyCourseProject
             List<List<int>> table = new List<List<int>>();
             var charsRemaining = text;
 
-            int ctr = 1;
             for (int i = 0; i < text.Count; i += blockCount)
             {
                 var col = new List<int>();
@@ -215,7 +210,7 @@ namespace CryptographyCourseProject
                 if (i + blockCount <= text.Count)
                 {
                     col.AddRange(charsRemaining.Take(blockCount));
-                    charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+                    charsRemaining = charsRemaining.Skip(blockCount).ToList();
                     table.Add(col);
                     continue;
                 }
@@ -227,7 +222,7 @@ namespace CryptographyCourseProject
                 col.AddRange(shortBlock);
                 table.Add(col);
 
-                charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+                charsRemaining = charsRemaining.Skip(blockCount).ToList();
             }
 
             // Transpose table so we get the right table
@@ -283,7 +278,6 @@ namespace CryptographyCourseProject
             List<List<int>> table = new List<List<int>>();
             var charsRemaining = chars;
 
-            int ctr = 1;
             for (int i = 0; i < chars.Count; i += blockLength)
             {
                 var row = new List<int>();
@@ -291,7 +285,7 @@ namespace CryptographyCourseProject
                 if (i + blockLength <= chars.Count)
                 {
                     row.AddRange(charsRemaining.Take(blockLength));
-                    charsRemaining = charsRemaining.Skip(ctr * blockLength).ToList();
+                    charsRemaining = charsRemaining.Skip(blockLength).ToList();
                     table.Add(row);
                     continue;
                 }
@@ -303,7 +297,7 @@ namespace CryptographyCourseProject
                 row.AddRange(shortBlock);
                 table.Add(row);
 
-                charsRemaining = charsRemaining.Skip(ctr * blockLength).ToList();
+                charsRemaining = charsRemaining.Skip(blockLength).ToList();
             }
 
             return table;

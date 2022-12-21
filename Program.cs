@@ -29,7 +29,7 @@ try
 
     Console.WriteLine();
 
-    Console.WriteLine("Generated substitution table: ");
+    Console.WriteLine("Generated substitution table (Key2): ");
     PrintDict(tst.Key2);
 
     Console.WriteLine();
