@@ -22,7 +22,7 @@
                 }
         }
 
-        public static void validateInput(string input)
+        public static void validateInput(string input, string key1, string key3)
         {
             if (input == null)
                 throw new Exception("Enter a message!");
@@ -30,6 +30,9 @@
             foreach(var c in input)
                 if (char.IsLetter(c) && (c < 'a' || c > 'z'))
                     throw new Exception("Invalid characters in message! (Latin alphabet only)");
+
+            if(input.Length < key1.Length || input.Length < key3.Length)
+                throw new Exception("Message cannot be shorter than any of the keys!");
         }
     }
 }

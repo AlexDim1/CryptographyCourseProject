@@ -23,7 +23,7 @@ try
     Console.WriteLine("Enter text:");
     Console.Write("P = ");
     var input = Console.ReadLine();
-    Utils.validateInput(input);
+    Utils.validateInput(input, key1, key3);
 
     var tst = new TSTAlgorithm(key1, key3, input);
 
