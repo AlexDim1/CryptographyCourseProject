@@ -23,7 +23,7 @@ try
     Console.WriteLine("Enter text:");
     Console.Write("P = ");
     var input = Console.ReadLine();
-    Utils.validateInput(input, key1, key3);
+    Utils.validateInput(input.ToLower(), key1, key3);
 
     var tst = new TSTAlgorithm(key1, key3, input);
 
@@ -34,7 +34,7 @@ try
 
     Console.WriteLine();
 
-    var encrypted = tst.Encrypt(input);
+    var encrypted = tst.Encrypt(input.ToLower());
 
     Console.WriteLine($"P = {input}");
 
@@ -70,11 +70,11 @@ try
 
     Console.WriteLine();
 
-    Console.WriteLine("Result after VerticalTransposition1Dec:");
+    Console.WriteLine("Result after VerticalTransposition1Dec and final decrypted message:");
     Console.Write("P = ");
     Console.WriteLine(decrypted);
 }
-catch (Exception e)
+catch (InvalidDataException e)
 {
     Console.WriteLine(e.Message);
 }

@@ -330,10 +330,10 @@ namespace CryptographyCourseProject
 
             foreach (char c in chars)
             {
-                var value = r.Next(10, 20);
+                var value = r.Next(20, 100);
 
                 while (usedValues.Contains(value))
-                    value = r.Next(10, 20);
+                    value = r.Next(20, 100);
 
                 result.Add(c, value);
                 usedValues.Add(value);
