@@ -240,7 +240,6 @@ namespace CryptographyCourseProject
             List<List<char>> table = new List<List<char>>();
             var charsRemaining = text;
 
-            int ctr = 1;
             for (int i = 0; i < text.Count; i += blockCount)
             {
                 var col = new List<char>();
@@ -248,7 +247,7 @@ namespace CryptographyCourseProject
                 if (i + blockCount <= text.Count)
                 {
                     col.AddRange(charsRemaining.Take(blockCount));
-                    charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+                    charsRemaining = charsRemaining.Skip(blockCount).ToList();
                     table.Add(col);
                     continue;
                 }
@@ -260,7 +259,7 @@ namespace CryptographyCourseProject
                 col.AddRange(shortBlock);
                 table.Add(col);
 
-                charsRemaining = charsRemaining.Skip(ctr * blockCount).ToList();
+                charsRemaining = charsRemaining.Skip(blockCount).ToList();
             }
 
             // Transpose table so we get the right table
